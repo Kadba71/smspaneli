@@ -7,8 +7,15 @@ Bu proje Railway uzerinde calisacak sekilde hazirlandi.
 1. GitHub reposunu Railway'e baglayin.
 2. Railway icinde bir PostgreSQL servisi ekleyin.
 3. Asagidaki environment variable'lari Railway proje ayarlarina girin.
-4. Railway build asamasinda `prisma db push` calistirarak veritabani semasini olusturur/gunceller.
-5. Uygulama `npm run start` ile ayaga kalkar.
+4. Railway build asamasinda sadece uygulama derlenir.
+5. Uygulama acilirken `prisma db push` calisarak veritabani semasini olusturur/gunceller.
+6. Ardindan uygulama `next start` ile ayaga kalkar.
+
+## Railway Build Notu
+
+- `DATABASE_URL` build aninda zorunlu degildir.
+- `DATABASE_URL` start asamasinda zorunludur.
+- Railway Node surumu icin proje `>=20.19.0 <21` bekler.
 
 ## Zorunlu Environment Variable'lar
 
