@@ -36,7 +36,7 @@ export async function GET() {
     }))
 
     const fileDate = format(toZonedTime(new Date(), TURKEY_TZ), 'yyyy-MM-dd')
-    const buffer = buildWorkbookBuffer('KullaniciRaporu', rows)
+    const buffer = await buildWorkbookBuffer('KullaniciRaporu', rows)
 
     return new NextResponse(buffer, {
       headers: createExcelHeaders(`kullanici-raporu-${fileDate}.xlsx`),

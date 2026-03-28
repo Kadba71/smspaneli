@@ -56,7 +56,7 @@ export async function GET(request: NextRequest) {
       }))
 
       const today = format(toZonedTime(new Date(), TURKEY_TZ), 'yyyy-MM-dd')
-      const buffer = buildWorkbookBuffer('AdminRaporu', rows)
+      const buffer = await buildWorkbookBuffer('AdminRaporu', rows)
 
       return new NextResponse(buffer, {
         headers: createExcelHeaders(`admin-raporu-${today}.xlsx`),

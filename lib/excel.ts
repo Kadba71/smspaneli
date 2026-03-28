@@ -1,17 +1,40 @@
-import * as XLSX from 'xlsx'
+import ExcelJS from 'exceljs'
 
 const EXCEL_CONTENT_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
 
-export function buildWorkbookBuffer(sheetName: string, rows: Array<Record<string, string | number>>) {
-  const worksheet = XLSX.utils.json_to_sheet(rows)
-  const workbook = XLSX.utils.book_new()
+export async function buildWorkbookBuffer(
+  sheetName: string,
+  rows: Array<Record<string, string | number>>
+) {
+  const workbook = new ExcelJS.Workbook()
+  const worksheet = workbook.addWorksheet(sheetName)
 
-  XLSX.utils.book_append_sheet(workbook, worksheet, sheetName)
+  const headers = Array.from(
+    rows.reduce((set, row) => {
+      for (const key of Object.keys(row)) {
+        set.add(key)
+      }
 
-  return XLSX.write(workbook, {
-    type: 'buffer',
-    bookType: 'xlsx',
-  })
+      return set
+    }, new Set<string>())
+  )
+
+  if (headers.length > 0) {
+    worksheet.columns = headers.map((header) => ({
+      header,
+      key: header,
+      width: Math.max(header.length + 4, 18),
+    }))
+
+    for (const row of rows) {
+      worksheet.addRow(row)
+    }
+
+    worksheet.getRow(1).font = { bold: true }
+  }
+
+  const buffer = await workbook.xlsx.writeBuffer()
+  return Buffer.from(buffer)
 }
 
 export function createExcelHeaders(fileName: string) {
