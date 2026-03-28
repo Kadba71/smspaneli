@@ -9,13 +9,14 @@ Bu proje Railway uzerinde calisacak sekilde hazirlandi.
 3. Asagidaki environment variable'lari Railway proje ayarlarina girin.
 4. Railway build asamasinda sadece uygulama derlenir.
 5. Uygulama acilirken `prisma db push` calisarak veritabani semasini olusturur/gunceller.
-6. Ardindan uygulama `next start` ile ayaga kalkar.
+6. Railway uygulamayi `0.0.0.0:$PORT` uzerinden ayaga kaldirir.
 
 ## Railway Build Notu
 
 - `DATABASE_URL` build aninda zorunlu degildir.
 - `DATABASE_URL` start asamasinda zorunludur.
 - Railway Node surumu icin proje `>=20.19.0 <21` bekler.
+- Healthcheck root path (`/`) uzerinden yapilir.
 
 ## Zorunlu Environment Variable'lar
 
