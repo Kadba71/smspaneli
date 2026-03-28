@@ -8,15 +8,23 @@ Bu proje Railway uzerinde calisacak sekilde hazirlandi.
 2. Railway icinde bir PostgreSQL servisi ekleyin.
 3. Asagidaki environment variable'lari Railway proje ayarlarina girin.
 4. Railway build asamasinda sadece uygulama derlenir.
-5. Uygulama acilirken `prisma db push` calisarak veritabani semasini olusturur/gunceller.
-6. Railway uygulamayi `0.0.0.0:$PORT` uzerinden ayaga kaldirir.
+5. Railway uygulamayi dogrudan `0.0.0.0:$PORT` uzerinden ayaga kaldirir.
+6. Veritabani sema guncellemesini gerekirse ayri bir shell komutu olarak calistirirsiniz.
 
 ## Railway Build Notu
 
 - `DATABASE_URL` build aninda zorunlu degildir.
-- `DATABASE_URL` start asamasinda zorunludur.
+- `DATABASE_URL` start asamasinda uygulama veritabani kullanacagi icin zorunludur.
 - Railway Node surumu icin proje `>=20.19.0 <21` bekler.
 - Healthcheck auth gerektirmeyen `/api/health` endpointi uzerinden yapilir.
+
+## Ilk Veritabani Hazirlama
+
+Deploy sonrasi Railway shell icinde bir kez sunu calistirin:
+
+```bash
+npm run db:push
+```
 
 ## Zorunlu Environment Variable'lar
 
