@@ -1,11 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { jwtVerify } from 'jose'
-import { env } from '@/lib/env'
 
 const PUBLIC_PATHS = ['/login', '/api/auth/login', '/api/health']
+const DISALLOWED_JWT_SECRETS = new Set([
+  'fallback-secret-change-in-production',
+  'sms-panel-super-secret-jwt-key-change-in-production-2024',
+  'local-dev-jwt-secret-please-change-2026-very-strong',
+])
 
 function getSecret() {
-  return new TextEncoder().encode(env.JWT_SECRET)
+  const jwtSecret = process.env.JWT_SECRET?.trim()
+
+  if (!jwtSecret || jwtSecret.length < 32 || DISALLOWED_JWT_SECRETS.has(jwtSecret)) {
+    throw new Error('JWT_SECRET eksik veya gecersiz.')
+  }
+
+  return new TextEncoder().encode(jwtSecret)
 }
 
 export async function middleware(request: NextRequest) {
@@ -64,5 +74,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/((?!_next/static|_next/image|favicon.ico).*)'],
+  matcher: ['/((?!_next/static|_next/image|favicon.ico|api/health).*)'],
 }
