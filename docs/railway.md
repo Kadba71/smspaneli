@@ -16,7 +16,7 @@ Bu proje Railway uzerinde calisacak sekilde hazirlandi.
 - `DATABASE_URL` build aninda zorunlu degildir.
 - `DATABASE_URL` start asamasinda zorunludur.
 - Railway Node surumu icin proje `>=20.19.0 <21` bekler.
-- Healthcheck root path (`/`) uzerinden yapilir.
+- Healthcheck auth gerektirmeyen `/api/health` endpointi uzerinden yapilir.
 
 ## Zorunlu Environment Variable'lar
 
