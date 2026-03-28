@@ -1,0 +1,89 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String
+  password  String
+  role      String   @default("user")
+  tokenVersion Int    @default(0)
+  createdAt DateTime @default(now())
+  smsLogs   SmsLog[]
+  proxy     UserProxy?
+}
+
+model UserProxy {
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  host      String
+  port      Int
+  username  String?
+  password  String?
+  protocol  String   @default("http")
+  assignedAt DateTime @default(now())
+  expiresAt  DateTime
+  lastError  String?
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([expiresAt])
+}
+
+model SmsTemplate {
+  id        String   @id @default(cuid())
+  title     String
+  message   String
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([isActive, updatedAt])
+}
+
+model SmsLog {
+  id          String   @id @default(cuid())
+  userId      String
+  phoneNumber String
+  message     String
+  status      String
+  apiResponse String?  // JSON string
+  lastError   String?
+  attemptCount Int     @default(0)
+  processingStartedAt DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now()) @updatedAt
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([createdAt])
+  @@index([status, createdAt])
+  @@index([status, processingStartedAt])
+}
+
+model RateLimitBucket {
+  key       String   @id
+  count     Int      @default(0)
+  resetAt   DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([resetAt])
+}
+
+model AuthAuditLog {
+  id        String            @id @default(cuid())
+  email     String
+  ipAddress String
+  success   Boolean
+  reason    String
+  createdAt DateTime          @default(now())
+
+  @@index([email, createdAt])
+  @@index([ipAddress, createdAt])
+}
